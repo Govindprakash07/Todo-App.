@@ -1,0 +1,50 @@
+const express = require("express");
+const Task = require("../models/Task");
+
+const router = express.Router();
+
+// Home - Show All Tasks
+router.get("/", async (req, res) => {
+    const tasks = await Task.find();
+    res.render("index", { tasks });
+});
+
+// Add Task Page
+router.get("/add", (req, res) => {
+    res.render("addTask");
+});
+
+// Handle Add Task
+router.post("/add", async (req, res) => {
+    const { title } = req.body;
+    const newTask = new Task({ title });
+    await newTask.save();
+    res.redirect("/");
+});
+
+// Edit Task Page
+router.get("/edit/:id", async (req, res) => {
+    const task = await Task.findById(req.params.id);
+    res.render("editTask", { task });
+});
+
+// Handle Edit Task
+router.post("/edit/:id", async (req, res) => {
+    const { title } = req.body;
+    await Task.findByIdAndUpdate(req.params.id, { title });
+    res.redirect("/");
+});
+
+// Mark Task as Complete
+router.get("/complete/:id", async (req, res) => {
+    await Task.findByIdAndUpdate(req.params.id, { completed: true });
+    res.redirect("/");
+});
+
+// Delete Task
+router.get("/delete/:id", async (req, res) => {
+    await Task.findByIdAndDelete(req.params.id);
+    res.redirect("/");
+});
+
+module.exports = router;
