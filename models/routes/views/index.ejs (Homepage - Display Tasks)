@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+    <h1>✅ Todo App</h1>
+    <a href="/add">➕ Add New Task</a>
+    <div class="tasks">
+        <% tasks.forEach(task => { %>
+            <div class="task">
+                <h2 class="<%= task.completed ? 'completed' : '' %>"><%= task.title %></h2>
+                <a href="/edit/<%= task._id %>">✏️ Edit</a>
+                <% if (!task.completed) { %>
+                    <a href="/complete/<%= task._id %>">✔️ Mark Complete</a>
+                <% } %>
+                <a href="/delete/<%= task._id %>" onclick="return confirm('Are you sure?')">❌ Delete</a>
+            </div>
+        <% }); %>
+    </div>
+</body>
+</html>
